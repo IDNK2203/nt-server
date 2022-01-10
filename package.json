@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "The Nomatalks Version revisited",
+  "main": "sever.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "devstart": "nodemon server.js",
+    "serverstart": "DEBUG=express-play-ground:* npm run devstart"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IDNK2203/nt-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IDNK2203/nt-server/issues"
+  },
+  "homepage": "https://github.com/IDNK2203/nt-server#readme",
+  "dependencies": {
+    "dotenv": "^11.0.0",
+    "express": "^4.17.2",
+    "express-ejs-layouts": "^2.5.1",
+    "mongoose": "^6.1.6",
+    "morgan": "^1.10.0"
+  }
+}
