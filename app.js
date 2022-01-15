@@ -7,6 +7,8 @@ var path = require("path");
 var logger = require("morgan");
 const ejsLayouts = require("express-ejs-layouts");
 
+// Route
+const userRouter = require("./routes/userRoutes");
 // setup express app
 const app = express();
 
@@ -17,13 +19,18 @@ app.use(ejsLayouts);
 app.set("layout", "layouts/main");
 
 // boilerplate middleware
+app.use(express.json({ limit: "10kb" }));
+
 if (app.get("env") !== "production") {
   app.use(logger("dev"));
 }
 
+app.use("/user", userRouter);
 // catch 404 and forward to error handler
-app.all("*", (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+app.all("*", (req, res, next, err) => {
+  res.json({
+    error: err.message,
+  });
 });
 
 module.exports = app;
