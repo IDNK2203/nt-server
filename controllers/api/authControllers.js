@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const catchAsync = require("../utils/catchAsync");
+const User = require("../../models/User");
+const catchAsync = require("../../utils/catchAsync");
+
 const createToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -30,7 +31,11 @@ const sendTokenAndResData = async (res, statusCode, user) => {
 exports.signup = catchAsync(async (req, res, next) => {
   // Instructions
   // 1. recieve user sign up data
+
   // 2. validate user sign up data (mongoose Lib)
+
+  // 3.encrypt user passwrod
+
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -38,6 +43,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  // 3. send back jwts as response
+  // 4. create and send JWTS
   sendTokenAndResData(res, 201, newUser);
 });

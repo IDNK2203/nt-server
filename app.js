@@ -8,7 +8,8 @@ var logger = require("morgan");
 const ejsLayouts = require("express-ejs-layouts");
 
 // Route
-const userRouter = require("./routes/userRoutes");
+const userRouterApi = require("./routes/api/userRoutes");
+const userRouterSsr = require("./routes/view/userRoutes");
 // setup express app
 const app = express();
 
@@ -25,7 +26,12 @@ if (app.get("env") !== "production") {
   app.use(logger("dev"));
 }
 
-app.use("/user", userRouter);
+// SSR routes
+app.use("/auth/", userRouterSsr);
+
+// API routes
+app.use("/api/v1/user/", userRouterApi);
+
 // catch 404 and forward to error handler
 app.all("*", (req, res, next, err) => {
   res.json({
