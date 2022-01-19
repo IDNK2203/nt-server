@@ -1,0 +1,38 @@
+<% if (typeof valError != "undefined") { %> <% valError.forEach((err)=>{ %>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Error message </strong> <br />
+  <%= err.msg %>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<% }) %> <% } %> <% if (success_msg != "") { %>
+<div class="alert-container">
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Success message</strong> <br />
+    <%=success_msg%>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+<% } %> <% if (error_msg != "") { %>
+<div class="alert-container">
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Error message</strong> <br />
+    <%=error_msg%>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+<% } %> <% if (error != "") { %>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Error </strong> <br />
+  <%= error['0']%>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<% } %>

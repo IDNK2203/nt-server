@@ -28,21 +28,28 @@ const sendTokenAndResData = async (res, statusCode, user) => {
   });
 };
 
-exports.signup = catchAsync(async (req, res, next) => {
+exports.signup = async (req, res, next) => {
   // Instructions
   // 1. recieve user sign up data
 
   // 2. validate user sign up data (mongoose Lib)
 
   // 3.encrypt user passwrod
-
-  const newUser = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-  });
+  try {
+    const newUser = await User.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+    });
+    sendTokenAndResData(res, 201, newUser);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: "error",
+      error: error,
+    });
+  }
 
   // 4. create and send JWTS
-  sendTokenAndResData(res, 201, newUser);
-});
+};

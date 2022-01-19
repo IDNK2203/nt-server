@@ -8,6 +8,7 @@ var logger = require("morgan");
 const ejsLayouts = require("express-ejs-layouts");
 
 // Route
+
 const userRouterApi = require("./routes/api/userRoutes");
 const userRouterSsr = require("./routes/view/userRoutes");
 // setup express app
@@ -21,6 +22,8 @@ app.set("layout", "layouts/main");
 
 // boilerplate middleware
 app.use(express.json({ limit: "10kb" }));
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+app.use(express.static(path.join(__dirname, "public")));
 
 if (app.get("env") !== "production") {
   app.use(logger("dev"));

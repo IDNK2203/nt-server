@@ -1,0 +1,70 @@
+<header>
+  <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+    <div class="container con-xl">
+      <a class="navbar-brand" href="/">
+        <div class="logo-holder">
+          <img src="/assets/nomatalks-logo.png" alt="Nomatalks brand logo" />
+        </div>
+      </a>
+      <div class="nav-btn">
+        <a href="/#cta_banner" class="_btn _btn--primary _btn--nav mt-2"
+          >Subscribe</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <% if (typeof navCategories!= "undefined" ) { %>
+          <%navCategories.forEach(cat => {%>
+          <li class="nav-item">
+            <a class="nav-link" href="/category/<%= cat.slug %>"
+              ><%= cat.name %></a
+            >
+          </li>
+          <% }) %> <% } %>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact-us">Contact us</a>
+          </li>
+          <li class="nav-item">
+            <a href="/about" class="nav-link">About Us</a>
+          </li>
+        </ul>
+        <form action="/results" class="d-flex" method="GET">
+          <% if (typeof searchOpts != "undefined") { %>
+          <input
+            class="form-control me-2 mr-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            name="blogTitle"
+            value="<%= searchOpts.blogTitle %>"
+          />
+          <% }else{%>
+          <input
+            class="form-control me-2 mr-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            name="blogTitle"
+          />
+          <% } %>
+
+          <button class="btn btn-outline-primary" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>
