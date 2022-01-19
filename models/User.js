@@ -57,12 +57,21 @@ const UserSchema = new mongoose.Schema({
   // },
 });
 
-UserSchema.pre("save", function (next) {
+UserSchema.pre("save", async function (next) {
+  console.log("presave middleware");
+
   if (!this.isModified("password")) return next();
 
-  this.password = bcrypt.hash(this.password, 12);
+  this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+  console.log(this.password);
   next();
+});
+
+UserSchema.method({
+  passwordCheck: async function (incomingPwd, user) {
+    return await bcrypt.compare(incomingPwd, user.password);
+  },
 });
 
 module.exports = mongoose.model("user", UserSchema);

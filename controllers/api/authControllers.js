@@ -31,9 +31,7 @@ const sendTokenAndResData = async (res, statusCode, user) => {
 exports.signup = async (req, res, next) => {
   // Instructions
   // 1. recieve user sign up data
-
   // 2. validate user sign up data (mongoose Lib)
-
   // 3.encrypt user passwrod
   try {
     const newUser = await User.create({
@@ -52,4 +50,36 @@ exports.signup = async (req, res, next) => {
   }
 
   // 4. create and send JWTS
+};
+
+exports.signin = async (req, res, next) => {
+  try {
+    // Instructions
+    // 1. check if sent data is complete
+    // 2. check if user email exists
+    // 3. check if user password match data base
+    // 4. check if password has been updated after JWT was created (TBI)
+    // 5. create and send token
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new Error("email and  password reqiured");
+    }
+    const incomingUser = await User.findOne({ email: email }).select(
+      "+password"
+    );
+    if (!incomingUser) {
+      throw new Error("This user does not exist");
+    }
+
+    if ((await incomingUser.passwordCheck(password, incomingUser)) === false) {
+      throw new Error("Incorrect Password, Pls try again");
+    }
+    sendTokenAndResData(res, 201, incomingUser);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      status: "error",
+      error: error.message,
+    });
+  }
 };

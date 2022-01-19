@@ -10,7 +10,7 @@ const ejsLayouts = require("express-ejs-layouts");
 // Route
 
 const userRouterApi = require("./routes/api/userRoutes");
-const userRouterSsr = require("./routes/view/userRoutes");
+const userRouterViews = require("./routes/view/userRoutes");
 // setup express app
 const app = express();
 
@@ -30,7 +30,7 @@ if (app.get("env") !== "production") {
 }
 
 // SSR routes
-app.use("/auth/", userRouterSsr);
+app.use("/nt/", userRouterViews);
 
 // API routes
 app.use("/api/v1/user/", userRouterApi);

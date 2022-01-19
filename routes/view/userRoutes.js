@@ -1,8 +1,10 @@
 const router = require("express").Router();
 
-const userController = require("../../controllers/view/authControllers");
+const authControllers = require("../../controllers/view/authControllers");
+const userControllers = require("../../controllers/view/userControllers");
 
-router.get("/signup", userController.signup);
-router.get("/profile", userController.profile);
+router.get("/signup", authControllers.signup);
+router.get("/signin", authControllers.signin);
+router.get("/profile", userControllers.profile);
 
 module.exports = router;
