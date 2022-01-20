@@ -6,7 +6,7 @@ var express = require("express");
 var path = require("path");
 var logger = require("morgan");
 const ejsLayouts = require("express-ejs-layouts");
-
+const cookieParser = require("cookie-parser");
 // Route
 
 const userRouterApi = require("./routes/api/userRoutes");
@@ -24,6 +24,7 @@ app.set("layout", "layouts/main");
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 
 if (app.get("env") !== "production") {
   app.use(logger("dev"));
