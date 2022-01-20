@@ -7,7 +7,7 @@ const { promisify } = require("util");
 // 1. Signup _/
 // 2. login _/
 // 3. protect _/
-// 4. logout
+// 4. logout _/
 // 5. isLoggedIn
 
 // Advance controllers
@@ -123,6 +123,42 @@ exports.protect = async (req, res, next) => {
 
     const incomingUser = await User.findById(decodedPayload.id);
     if (!incomingUser) throw new Error("This user no longer exists", 401);
+    req.user = incomingUser;
+    res.locals.user = incomingUser;
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "error",
+      error: error.message,
+    });
+  }
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
+  res.redirect("/nt/signin");
+};
+
+exports.isloggedIn = async (req, res, next) => {
+  try {
+    let token;
+    if (req.cookies.jwt) {
+      token = req.cookies.jwt;
+    }
+
+    if (!token) {
+      return next();
+    }
+
+    const decodedPayload = await promisify(jwt.verify)(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    const incomingUser = await User.findById(decodedPayload.id);
+    if (!incomingUser) return next();
+    res.locals.user = incomingUser;
     req.user = incomingUser;
     next();
   } catch (error) {
