@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 const catchAsync = require("../../utils/catchAsync");
+const AppError = require("../../utils/appError");
 const { promisify } = require("util");
 
 // The basic Auth controllers
@@ -41,61 +42,44 @@ const sendTokenAndResData = async (res, statusCode, user) => {
   });
 };
 
-exports.signup = async (req, res, next) => {
+exports.signup = catchAsync(async (req, res, next) => {
   // Instructions
   // 1. recieve user sign up data
   // 2. validate user sign up data (mongoose Lib)
-  // 3.encrypt user passwrod
-  try {
-    const newUser = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-    });
-    sendTokenAndResData(res, 201, newUser);
-  } catch (error) {
-    res.status(400).json({
-      status: "error",
-      error: error,
-    });
-  }
-
+  // 3. encrypt user passwrod
   // 4. create and send JWTS
-};
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+  });
+  sendTokenAndResData(res, 201, newUser);
+});
 
-exports.signin = async (req, res, next) => {
-  try {
-    // Instructions
-    // 1. check if sent data is complete
-    // 2. check if user email exists
-    // 3. check if user password match data base
-    // 4. create and send token
-    const { email, password } = req.body;
-    if (!email || !password) {
-      throw new Error("email and  password reqiured");
-    }
-    const incomingUser = await User.findOne({ email: email }).select(
-      "+password"
-    );
-    if (!incomingUser) {
-      throw new Error("This user does not exist");
-    }
-
-    if ((await incomingUser.passwordCheck(password, incomingUser)) === false) {
-      throw new Error("Incorrect Password, Pls try again");
-    }
-    sendTokenAndResData(res, 201, incomingUser);
-  } catch (error) {
-    res.status(400).json({
-      status: "error",
-      error: error.message,
-    });
+exports.signin = catchAsync(async (req, res, next) => {
+  // Instructions
+  // 1. check if sent data is complete
+  // 2. check if user email exists
+  // 3. check if user password match data base
+  // 4. create and send token
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return next(new AppError("email and  password reqiured"));
   }
-};
+  const incomingUser = await User.findOne({ email: email }).select("+password");
+  if (!incomingUser) {
+    return next(new AppError("This user does not exist"));
+  }
+
+  if ((await incomingUser.passwordCheck(password, incomingUser)) === false) {
+    return next(new AppError("Incorrect Password, Pls try again"));
+  }
+  sendTokenAndResData(res, 201, incomingUser);
+});
 
 // verify the authenticity of the JWT token and pass user obj to next middleware
-exports.protect = async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   // Instructions
   // 1. check if token exist in cookie
   // 2. check if the cookie has exipred
@@ -103,37 +87,32 @@ exports.protect = async (req, res, next) => {
   // 4. check if user still exists
   // 5. check if password was changed after user login in
   // 6. call the next middleware
-  try {
-    let token;
-    if (req.cookies.jwt) {
-      token = req.cookies.jwt;
-    }
+  let token;
+  if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
 
-    if (!token) {
-      throw new Error(
+  if (!token) {
+    return next(
+      new AppError(
         "you are not logged in please log in to view this resource",
         401
-      );
-    }
-
-    const decodedPayload = await promisify(jwt.verify)(
-      token,
-      process.env.JWT_SECRET
+      )
     );
-
-    const incomingUser = await User.findById(decodedPayload.id);
-    if (!incomingUser) throw new Error("This user no longer exists", 401);
-    req.user = incomingUser;
-    res.locals.user = incomingUser;
-    next();
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: "error",
-      error: error.message,
-    });
   }
-};
+
+  const decodedPayload = await promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET
+  );
+
+  const incomingUser = await User.findById(decodedPayload.id);
+  if (!incomingUser)
+    return next(new AppError("This user no longer exists", 401));
+  req.user = incomingUser;
+  res.locals.user = incomingUser;
+  return next();
+});
 
 exports.logout = (req, res) => {
   res.clearCookie("jwt");
@@ -162,10 +141,6 @@ exports.isloggedIn = async (req, res, next) => {
     req.user = incomingUser;
     next();
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      status: "error",
-      error: error.message,
-    });
+    return next();
   }
 };
