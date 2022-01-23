@@ -2,9 +2,11 @@
   <div class="container">
     <main class="bsod container">
       <h1 class="neg title">
-        <span class="bg">Error - <%= statusCode %></span>
+        <span class="bg"
+          >Error - <%= typeof statusCode != "undefined" ?statusCode:500 %></span
+        >
       </h1>
-      <p><%= status %></p>
+      <p><%= typeof status != "undefined" ? status : "Error" %></p>
       <p><%= message %>, to continue:</p>
       <p>
         * Return to our homepage.<br />

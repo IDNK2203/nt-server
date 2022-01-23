@@ -36,12 +36,16 @@ const prodApiErr = (err, req, res) => {
 const ProdSrrErr = (err, req, res) => {
   if (err.isOperational) {
     return res.status(err.statusCode).render("public/error", {
+      layout: "layouts/authLayout",
+
       title: "Error page",
       message: err.message,
     });
   }
   res.status(500).render("public/error", {
+    layout: "layouts/authLayout",
     title: "Error page",
+
     status: "Error",
     message: "Unknown error occured",
   });
