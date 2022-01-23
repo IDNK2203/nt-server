@@ -62,9 +62,10 @@ const handleDuplicateFieldsDB = (err) => {
 };
 
 const handleValidationErrorDB = (err) => {
+  console.log(err);
   const errors = Object.values(err.errors).map((el) => el.message);
-
   const message = `Invalid input data. ${errors.join(". ")}`;
+  console.log(errors);
   return new AppError(message, 400);
 };
 
@@ -91,10 +92,7 @@ const expiredTokenError = () => {
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
-  console.log(err);
-  console.log(err);
   if (process.env.NODE_ENV === "development") {
-    console.log("dev");
     sendDevErrors(err, req, res);
   } else if (process.env.NODE_ENV === "production") {
     console.log("Prod");
