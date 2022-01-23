@@ -13,11 +13,11 @@ const bcrypt = require("bcrypt");
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: [true, "please provide a name"],
+    required: [true, "please provide a name"],
   },
   email: {
     type: String,
-    required: [true, "please provide a name"],
+    required: [true, "please provide an email"],
     unique: true,
     validate: {
       validator: validator.isEmail,
@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "please provide a name"],
+    required: [true, "please provide a password"],
     minLength: 8,
     select: false,
   },

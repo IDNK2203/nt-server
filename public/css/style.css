@@ -1,0 +1,18 @@
+.bs-alert-container {
+  margin-top: 1rem;
+  height: auto;
+  opacity: 1;
+  overflow: hidden;
+  animation: slide 2s ease 6s forwards;
+}
+
+@keyframes slide {
+  from {
+    height: auto;
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    height: 0px;
+  }
+}
