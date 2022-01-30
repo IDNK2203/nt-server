@@ -6813,7 +6813,8 @@ var signUpHandler = /*#__PURE__*/function () {
             formValues.password = document.querySelector(".formSignup input[name='password']").value;
             formValues.passwordConfirm = document.querySelector(".formSignup input[name='passwordConfirm']").value;
             _context.next = 9;
-            return (0, _AuthRequest.default)("http://localhost:3000/api/v1/user/signup", formValues);
+            return (0, _AuthRequest.default)( // "http://localhost:3000/api/v1/user/signup",
+            "https://nt-2.herokuapp.com/api/v1/user/signup", formValues);
 
           case 9:
             return _context.abrupt("return", _context.sent);
@@ -6856,7 +6857,8 @@ var signInHandler = /*#__PURE__*/function () {
             formValues.email = document.querySelector(".formSignin input[name='email']").value;
             formValues.password = document.querySelector(".formSignin input[name='password']").value;
             _context2.next = 8;
-            return (0, _AuthRequest.default)("http://localhost:3000/api/v1/user/signin", formValues);
+            return (0, _AuthRequest.default)( // "http://localhost:3000/api/v1/user/signin",
+            "https://nt-2.herokuapp.com/api/v1/user/signin", formValues);
 
           case 8:
             return _context2.abrupt("return", _context2.sent);
@@ -7193,7 +7195,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60087" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58424" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

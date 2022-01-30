@@ -17,7 +17,8 @@ export const signUpHandler = async function (e) {
       ".formSignup input[name='passwordConfirm']"
     ).value;
     return await AuthRequest(
-      "http://localhost:3000/api/v1/user/signup",
+      // "http://localhost:3000/api/v1/user/signup",
+     "https://nt-2.herokuapp.com/api/v1/user/signup",
       formValues
     );
   }
@@ -37,7 +38,8 @@ export const signInHandler = async function (e) {
       ".formSignin input[name='password']"
     ).value;
     return await AuthRequest(
-      "http://localhost:3000/api/v1/user/signin",
+      // "http://localhost:3000/api/v1/user/signin",
+      "https://nt-2.herokuapp.com/api/v1/user/signin",
       formValues
     );
   }
